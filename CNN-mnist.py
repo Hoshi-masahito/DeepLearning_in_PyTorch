@@ -5,6 +5,7 @@ import torchvision
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 from torchvision.datasets import MNIST
+from torch.utils.data import DataLoader
 from PIL import Image
 import matplotlib.pyplot as plt
 import numpy
