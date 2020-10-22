@@ -1,34 +1,32 @@
 import os
 from PIL import Image
-import chainer
+from torchvision.datasets import MNIST
+from torch.utils.data import DataLoader
 import shutil
 import glob
 from pprint import pprint
 import random
 from pathlib import Path
+from tqdm import tqdm
 
 random.seed(0)
 
-def save(data, index, num):
-    img = Image.new("L", (28, 28))
-    pix = img.load()
-    for i in range(28):
-        for j in range(28):
-            pix[i, j] = int(data[i+j*28]*256)
-    filename = "./mnist_all/" + str(num) + "_test" + "{0:05d}".format(index) + ".png"
-    img.save(filename)
-    print(filename)
+mnist_data = MNIST(root='./', train=True, transform=None, download=True)
 
-def main():
-    train, _ = chainer.datasets.get_mnist()
-    dirpath = "./mnist_all"
-    if os.path.isdir(dirpath) is False:
-       os.makedirs(dirpath)
-    for i in range(len(train)):
-        save(train[i][0], i, train[i][1])
-
-if __name__ == '__main__':
-    main()
+def makeMnistPng(image_dsets):
+    for idx in tqdm(range(10)):
+        print("Making image file for index {}".format(idx))
+        num_img = 0
+        dir_path = './mnist_all/'
+        if not os.path.exists(dir_path):
+            os.makedirs(dir_path)
+        for image, label in image_dsets:
+           if label == idx:
+                filename = dir_path +'/mnist_'+ str(idx) + '-' + str(num_img) + '.png'
+                if not os.path.exists(filename):
+                    image.save(filename)
+                num_img += 1
+    print('Success to make MNIST PNG image files. index={}'.format(idx))
 
 class FileControler(object):
     def get_file_path(self, input_dir, pattern):
@@ -56,13 +54,13 @@ class FileControler(object):
 
 file_controler =FileControler()
 
-all_file_dir = './mnist_all/'
+makeMnistPng(mnist_data)
 
+all_file_dir = './mnist_all/'
 sampled_dir = './mnist_sampled/'
 
 pattern = '*.png'
 files_path = file_controler.get_file_path(all_file_dir, pattern)
-pprint(files_path)
 
 sample_num = 100
 file_controler.random_sampling(files_path, sample_num, sampled_dir)
@@ -72,5 +70,5 @@ files = glob.glob("./mnist_sampled/*")
 for i in range(10):
     os.makedirs(sampled_dir+str(i), exist_ok=True)
     for x in files:
-        if str(i) + '_' in x:
+        if '_' + str(i) in x:
             shutil.move(x, sampled_dir + str(i))
