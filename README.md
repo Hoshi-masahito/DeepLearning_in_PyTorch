@@ -4,3 +4,6 @@ DeepLearing周辺のものをアップしていきます。
 
 ### CNN-mnist.py
 CNNによるMNISTの画像認識を行うプログラムです。
+
+### mnist_sampling_equally.py
+MNISTの各クラスn枚ずつランダムにサンプリングするプログラムです。
