@@ -8,3 +8,6 @@ CNNによるMNISTの画像認識を行うプログラムです。
 
 ### mnist_sampling_equally.py
 MNISTの各クラスn枚ずつランダムにサンプリングするプログラムです。
+
+## mnist_sampling_randomly.py
+MNISTの全画像の中からn枚ランダムにサンプリングするプログラムです。
