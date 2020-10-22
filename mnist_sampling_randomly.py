@@ -15,17 +15,16 @@ def save(data, index, num):
     for i in range(28):
         for j in range(28):
             pix[i, j] = int(data[i+j*28]*256)
-    filename = "./mnist_all/" + str(num) + "/" + str(num) + "_test" + "{0:05d}".format(index) + ".png"
+    filename = "./mnist_all/" + str(num) + "_test" + "{0:05d}".format(index) + ".png"
     img.save(filename)
     print(filename)
 
 def main():
     train, _ = chainer.datasets.get_mnist()
-    for i in range(10):
-        dirpath = "./mnist_all/" + str(i)
-        if os.path.isdir(dirpath) is False:
-            os.makedirs(dirpath)
-    for i in range(len(train)):
+    dirpath = "./mnist_all"
+    if os.path.isdir(dirpath) is False:
+       os.makedirs(dirpath)
+    for i in range(1000):
         save(train[i][0], i, train[i][1])
 
 if __name__ == '__main__':
@@ -57,13 +56,12 @@ class FileControler(object):
 
 file_controler =FileControler()
 
-for i in range(10):
-    all_file_dir = './mnist_all/' + str(i)
-    sampled_dir = './mnist_sampled/' + str(i)
+all_file_dir = './mnist_all/'
+sampled_dir = './mnist_sampled/'
 
-    pattern = '*.png'
-    files_path = file_controler.get_file_path(all_file_dir, pattern)
-    pprint(files_path)
+pattern = '*.png'
+files_path = file_controler.get_file_path(all_file_dir, pattern)
+pprint(files_path)
 
-    sample_num = 60
-    file_controler.random_sampling(files_path, sample_num, sampled_dir)
+sample_num = 600
+file_controler.random_sampling(files_path, sample_num, sampled_dir)
