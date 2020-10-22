@@ -24,7 +24,7 @@ def main():
     dirpath = "./mnist_all"
     if os.path.isdir(dirpath) is False:
        os.makedirs(dirpath)
-    for i in range(1000):
+    for i in range(len(train)):
         save(train[i][0], i, train[i][1])
 
 if __name__ == '__main__':
@@ -57,11 +57,20 @@ class FileControler(object):
 file_controler =FileControler()
 
 all_file_dir = './mnist_all/'
+
 sampled_dir = './mnist_sampled/'
 
 pattern = '*.png'
 files_path = file_controler.get_file_path(all_file_dir, pattern)
 pprint(files_path)
 
-sample_num = 600
+sample_num = 100
 file_controler.random_sampling(files_path, sample_num, sampled_dir)
+
+files = glob.glob("./mnist_sampled/*")
+
+for i in range(10):
+    os.makedirs(sampled_dir+str(i), exist_ok=True)
+    for x in files:
+        if str(i) + '_' in x:
+            shutil.move(x, sampled_dir + str(i))
